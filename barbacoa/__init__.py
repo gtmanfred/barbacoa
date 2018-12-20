@@ -5,6 +5,7 @@ Asynchronous task manager using asyncio
 import click
 import operator
 import os
+import pkg_resources
 import time
 import xdg
 
@@ -16,8 +17,11 @@ try:
     import setuptools_scm
     __version__ = setuptools_scm.get_version()
 except ImportError:
-    # This is only set for packaging
-    __version__ = None
+    try:
+        __version__ = pkg_resources.get_distribution(__name__).version
+    except pkg_resources.DistributionNotFound:
+        # package is not installed
+        __version__ = None
 
 
 async def add_task(future, task, kwargs=None):
